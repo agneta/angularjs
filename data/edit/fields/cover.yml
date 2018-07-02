@@ -1,0 +1,6 @@
+name: cover
+icon: material/photo
+title:
+  en: 'Cover'
+extend: 'media'
+content_type: 'image'

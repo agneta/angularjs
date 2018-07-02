@@ -1,0 +1,8 @@
+title:
+  en: 'Email'
+type: email
+group: 'input'
+icon: 'material/email'
+validators:
+  required: true
+  pattern: 'email'

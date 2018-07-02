@@ -1,0 +1,5 @@
+title:
+  en: Authorization
+
+menuHide: true
+controller: ag-authorization

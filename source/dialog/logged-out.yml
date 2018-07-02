@@ -1,0 +1,5 @@
+title:
+  en: Logged out
+skipAuthorization: true
+controller: 'AgDialogCtrl'
+class: success
