@@ -4,18 +4,53 @@ if(locals.toolbar.href){
 var href = locals.toolbar.href?'href="'+locals.toolbar.href+'"':null;
 }
 %>
-<md-toolbar class="md-theme-light toolbar">
-<div class="md-toolbar-tools" layout="row">
-	<md-button class="md-icon-button close" ng-show="viewData.parentPath" ng-href="{{get_path(viewData.parentPath)}}" ng-show="!menu.isLocked" aria-label="Close">
-		<md-icon md-svg-src="<%-get_icon('material/arrow-back')%>"></md-icon>
-	</md-button>
-		<h2 class="title">
-		{{viewData.title}}
-		</h2>
-	<span flex></span>
+<div class="toolbar"
+ layout="column">
+	<div layout-align="start center"
+	 class="md-padding"
+	 layout="row">
 
-	<md-button class="md-icon-button close"  ng-click="close()" ng-show="!menu.isLocked" aria-label="Close">
-	<md-icon md-svg-src="<%-get_icon('material/close')%>"></md-icon>
-	</md-button>
+		<h2 class="title">
+			{{viewData.title}}
+		</h2>
+		<span flex></span>
+
+		<a class="md-icon-button close"
+		 ng-click="close()"
+		 ng-show="!menu.isLocked"
+		 aria-label="Close">
+			<md-icon md-svg-src="<%-get_icon('material/close')%>"></md-icon>
+		</a>
+	</div>
+	<div layout="row"
+	 class="navigation"
+	 layout-align="start center">
+
+		<%if(page.parentPath){%>
+		<a ng-href="<%-get_path('/')%>"
+		 aria-label="Home"
+		 class="home md-icon-button">
+			<md-icon md-svg-src="<%-get_icon('material/home')%>"></md-icon>
+		</a>
+		<%}%>
+
+		<%
+		console.log(page.parentPath)
+		if(page.parentPath){
+		var parentPage = get_page(page.parentPath);
+		if(parentPage && parentPage.parentPath && parentPage.path!='/'){
+		%>
+		<span flex="auto"></span>
+
+		<a ng-href="<%-get_path(parentPage)%>">
+			<div layout="row"
+			 layout-align="start center"
+			 aria-label="Got to Parent">
+				<md-icon md-svg-src="<%-get_icon('material/arrow-back')%>"></md-icon>
+				<span>
+					<%-lng(parentPage.title)%></span>
+			</div>
+		</a>
+		<%}}%>
+	</div>
 </div>
-</md-toolbar>
