@@ -23,7 +23,7 @@ var href = locals.toolbar.href?'href="'+locals.toolbar.href+'"':null;
 		</a>
 	</div>
 	<div layout="row"
-	 class="navigation"
+	 class="navigation ag-margin"
 	 layout-align="start center">
 
 		<%if(page.parentPath){%>
@@ -40,9 +40,9 @@ var href = locals.toolbar.href?'href="'+locals.toolbar.href+'"':null;
 		var parentPage = get_page(page.parentPath);
 		if(parentPage && parentPage.parentPath && parentPage.path!='/'){
 		%>
-		<span flex="auto"></span>
 
-		<a ng-href="<%-get_path(parentPage)%>">
+		<a class="parent"
+		 ng-href="<%-get_path(parentPage)%>">
 			<div layout="row"
 			 layout-align="start center"
 			 aria-label="Got to Parent">
@@ -51,6 +51,14 @@ var href = locals.toolbar.href?'href="'+locals.toolbar.href+'"':null;
 					<%-lng(parentPage.title)%></span>
 			</div>
 		</a>
+
+
 		<%}}%>
+
+		<span flex="auto"></span>
+
+
+		<%-template('layout/languages')%>
+
 	</div>
 </div>
