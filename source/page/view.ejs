@@ -9,9 +9,9 @@ if(!footerShow){
 <div <%-tag%> id="view-content" layout="row" ng-keypress="viewData.keypress && onKeyPress($event)" flex
 	layout-align="start stretch">
 
-	<md-sidenav class="view-wrapper md-sidenav-left md-whiteframe-z2 site-menu"
-	 ng-class="{unlocked:!menu.isLocked}"
-	 md-is-locked-open="menuLock()"
+	<div id="site-menu"
+	 class="view-wrapper md-sidenav-left md-whiteframe-z2"
+	 ng-class="{unlocked:!menu.isLocked,lock:menuLock(),showing:menu.showing}"
 	 md-component-id="menu"
 	 layout="column">
 		<div ag-menu-side
@@ -20,7 +20,7 @@ if(!footerShow){
 			<%-template('sidebar/toolbar')%>
 			<md-progress-linear class="primary loadingBar"
 			 md-mode="{{sidebarLoading?'indeterminate':'determinate'}}"></md-progress-linear>
-			<md-content flex>
+			<md-content flex="100">
 				<%
 				var templateSidebar = page.templateSource + '.sidebar';
 				if (_.isString(page.sidebar)) {
@@ -44,7 +44,7 @@ if(!footerShow){
 			</div>
 			<%}%>
 		</div>
-	</md-sidenav>
+	</div>
 
 	<md-content id="view-scroller"
 	 flex>

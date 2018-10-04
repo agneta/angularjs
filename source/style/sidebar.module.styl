@@ -1,6 +1,34 @@
-md-sidenav {
-  &.md-sidenav-left {
-    z-index: 999;
+#site-menu {
+  z-index: 999;
+  transition: transform 400ms ease;
+  transform: translateX(-100%);
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: white;
+  z-index: 300;
+  min-width: 280px;
+
+  &.showing {
+    transform: translateX(0);
+  }
+
+  &.unlocked {
+    position: absolute !important;
+  }
+
+  .header {
+    >h2 {
+      margin: 0 auto;
+      color: color-primary;
+    }
+  }
+
+  md-list {
+    md-icon {
+      color: color-primary;
+      padding-right: 10px;
+    }
   }
 
   .toolbar {
@@ -42,10 +70,6 @@ md-sidenav {
       padding: 5px 10px;
     }
   }
-}
-
-md-backdrop.md-sidenav-backdrop {
-  z-index: 55;
 }
 
 .sidebar-default {

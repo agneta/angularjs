@@ -15,87 +15,85 @@
  *   limitations under the License.
  */
 
-var app = angular.module('MainApp');
+var app = angular.module("MainApp");
 var menu;
 
 app.run(function($rootScope) {
-  Object.defineProperty($rootScope, 'hasMenu', {
+  Object.defineProperty($rootScope, "hasMenu", {
     get: function() {
       return Boolean(menu);
     }
   });
 });
 
-app.directive('agMenuSide', function($rootScope, $timeout, $route, $mdSidenav, $mdMedia, $http, $compile, $log) {
+app.directive("agMenuSide", function(
+  $rootScope,
+  $timeout,
+  $route,
+  $mdMedia,
+  $log
+) {
   return {
     link: function(vm) {
-
       var locked = false;
-      $rootScope.menu = {};
+      var menu = ($rootScope.menu = {});
 
       function onRoute(event, current) {
-
         $timeout(function() {
-
-          menu = $mdSidenav('menu');
           locked = current && current.locals.data.menuLock;
           //contentElement.empty();
 
-          if ($mdMedia('gt-sm')) {
-
+          if ($mdMedia("gt-sm")) {
             if (locked) {
-              $rootScope.menu.show();
+              menu.show();
             } else {
               remove();
             }
-
           }
-
         }, 10);
-
-
       }
 
       onRoute(null, $route.current);
 
       function remove() {
-        $rootScope.menu.hide();
+        menu.hide();
         $timeout(function() {
           vm.sidebarHTML = null;
         }, 1400);
       }
 
       vm.menuLock = function() {
-        $rootScope.menu.isLocked = locked && $mdMedia('gt-sm');
-        return $rootScope.menu.isLocked;
+        menu.isLocked = locked && $mdMedia("gt-sm");
+        if (menu.isLocked) {
+          menu.showing = true;
+        }
+        return menu.isLocked;
       };
 
-      $rootScope.menu.toggle = function() {
-        return menu.toggle();
+      menu.toggle = function() {
+        return (menu.showing = !menu.showing);
       };
 
-      $rootScope.menu.show = function() {
-        return menu.open();
+      menu.show = function() {
+        return (menu.showing = true);
       };
 
-      $rootScope.menu.hide = function() {
-        return menu.close();
+      menu.hide = function() {
+        return (menu.showing = false);
       };
 
       vm.close = function() {
-        $rootScope.menu.hide()
-          .then(function() {
-            $log.debug('Navigation close is done');
-          });
+        menu.hide().then(function() {
+          $log.debug("Navigation close is done");
+        });
       };
     }
   };
 });
 
-
-app.directive('mdMenu', function() {
+app.directive("mdMenu", function() {
   return {
-    require: '^mdMenu',
+    require: "^mdMenu",
     link: function(scope, elm, attr, ctrl) {
       // now I can expose what I need to the scope
       scope.$mdCloseMenu = ctrl.close;
