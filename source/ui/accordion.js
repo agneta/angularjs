@@ -14,29 +14,28 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-(function(){
+(function() {
   var activeScope;
   var scopeCount = 0;
 
-  agneta.directive('AgMenuItemCtrl', function($rootScope, $element, $timeout) {
+  agneta.directive("AgMenuItemCtrl", function($element, $timeout) {
     var vm = this;
     vm.expanded = false;
     vm.id = scopeCount++;
     var element = $element[0];
-    var list = element.querySelector('.list');
-    vm.$watch('expanded', function() {
-
+    var list = element.querySelector(".list");
+    vm.$watch("expanded", function() {
       if (vm.expanded) {
-        list.style.transition = 'none';
-        list.style['margin-top'] = -list.offsetHeight;
+        list.style.transition = "none";
+        list.style["margin-top"] = -list.offsetHeight;
         $timeout(function() {
           list.style.transition = null;
-          list.style['margin-top'] = null;
+          list.style["margin-top"] = null;
         }, 100);
         vm.expandedClass = true;
       } else {
-        if(list.offsetHeight>0){
-          list.style['margin-top'] = -list.offsetHeight;
+        if (list.offsetHeight > 0) {
+          list.style["margin-top"] = -list.offsetHeight;
         }
         $timeout(function() {
           vm.expandedClass = false;
@@ -45,13 +44,11 @@
     });
 
     vm.toggleView = function() {
-
       vm.expanded = !vm.expanded;
 
       //
 
       var skip = (function() {
-
         var parent = vm.$parent;
 
         while (parent) {
@@ -64,7 +61,6 @@
         }
 
         return false;
-
       })();
 
       if (!skip) {
@@ -86,7 +82,6 @@
 
       //
       activeScope = vm.expanded ? vm : null;
-
     };
   });
 })();

@@ -20,17 +20,16 @@ page.__templates = page.__templates || [];
 %>
 
 <div ag-tabs
-class="ui-tabs <%-locals.class%>"
-name="<%-tabs.name%>"
-ng-init="activeSection='<%-defaultSection%>'"
-layout="column"
->
-  <div
-  <%-tabs.attrId%>
-  class="layout-wrap header"
-  layout="row"
-  layout-align="<%-tabs.align%> center">
-  <%for(var section of tabs.templates){
+  class="ui-tabs <%-locals.class%>"
+  name="<%-tabs.name%>"
+  ng-init="activeSection='<%-defaultSection%>'"
+  layout="column">
+  <div <%-tabs.attrId%>
+    class="layout-wrap header"
+    layout="row"
+    layout-align="
+    <%-tabs.align%> center">
+    <%for(var section of tabs.templates){
     var show = null;
     if(section.skip){
       continue;
@@ -46,21 +45,22 @@ layout="column"
     });
 
     %>
-    <div
-    class="item"
-    ng-class="{active:activeSection=='<%-section.name%>'}"
-    ng-click="select('<%-section.name%>')"
-    layout="column"
-    layout-align="center center"
-    <%-show%>
-    >
-    <%if(section.icon){%>
-    <md-icon md-svg-src="<%-get_icon(section.icon)%>"></md-icon>
-    <%}%>
-    <span><%-lng(section.title)%></span>
+    <div class="item"
+      ng-class="{active:activeSection=='<%-section.name%>'}"
+      ng-click="select('<%-section.name%>')"
+      layout="column"
+      layout-align="center center"
+      <%-show%>
+      >
+      <%if(section.icon){%>
+      <md-icon md-svg-src="<%-get_icon(section.icon)%>"></md-icon>
+      <%}%>
+      <span>
+        <%-lng(section.title)%></span>
     </div>
     <%}%>
   </div>
-  <div class="tab-content" ng-include="'ui-<%-tabs.name%>-'+activeSection+'.html'">
+  <div class="tab-content"
+    ng-include="'ui-<%-tabs.name%>-'+activeSection+'.html'">
   </div>
 </div>

@@ -15,10 +15,9 @@
  *   limitations under the License.
  */
 
-var app = angular.module('MainApp');
+var app = angular.module("MainApp");
 
 app.run(function($rootScope, $mdDialog) {
-
   ////////////////////////////////////////////////////////////////
   // Dialog History
   ////////////////////////////////////////////////////////////////
@@ -26,7 +25,6 @@ app.run(function($rootScope, $mdDialog) {
   $mdDialog._show = $mdDialog.show;
 
   $mdDialog.show = function(options) {
-
     if (options.nested) {
       var opt = options._options || options;
       opt.multiple = true;
@@ -39,7 +37,6 @@ app.run(function($rootScope, $mdDialog) {
     options.parent = angular.element(document.body);
 
     return $mdDialog._show(options);
-
   };
 
   $mdDialog.open = function(options) {
@@ -50,14 +47,14 @@ app.run(function($rootScope, $mdDialog) {
     }
 
     var locals = {};
-    var path = agneta.urljoin(agneta.lang, 'dialog', options.partial);
+    var path = agneta.urljoin(agneta.lang, "dialog", options.partial);
 
     locals.data = options.data || {};
 
     $rootScope.loadingMain = true;
-    $rootScope.loadData(path)
+    $rootScope
+      .loadData(path)
       .then(function(data) {
-
         locals.remote = data.extra || {};
 
         var dialogOptions = {
@@ -73,16 +70,12 @@ app.run(function($rootScope, $mdDialog) {
       .finally(function() {
         $rootScope.loadingMain = false;
       });
-
   };
 
   $rootScope.dialog = $mdDialog.open;
-
-
 });
 
-agneta.directive('AgDialogCtrl', function($rootScope, $mdDialog, data) {
-
+agneta.directive("AgDialogCtrl", function($rootScope, $mdDialog, data) {
   var vm = this;
 
   vm.data = data;
@@ -99,7 +92,7 @@ agneta.directive('AgDialogCtrl', function($rootScope, $mdDialog, data) {
     $mdDialog.hide(data);
   };
 
-  $rootScope.$on('error', function() {
+  $rootScope.$on("error", function() {
     vm.loading = false;
   });
 });
