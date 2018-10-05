@@ -1,14 +1,30 @@
 module.exports = {
-  "globals": {
-    angular: true,
-    agneta: true,
-    require: true,
-    $$template: true,
-    module: true
+  env: {
+    es6: true,
+    node: true
   },
-  "env": {
-    "es6": false,
-    "browser": true,
-    "node": false
+  plugins: ['node'],
+  extends: 'eslint:recommended',
+  parserOptions: {
+    sourceType: 'module'
+  },
+  rules: {
+    'no-console': [
+      'error',
+      {
+        allow: ['warn', 'error', 'log']
+      }
+    ],
+    indent: [
+      'error',
+      2,
+      {
+        SwitchCase: 1,
+        ignoredNodes: ['TemplateLiteral > ConditionalExpression']
+      }
+    ],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single'],
+    semi: ['error', 'always']
   }
-}
+};
