@@ -41,7 +41,7 @@
               case 'GET':
                 config.params = config.params || {};
                 data = config.params;
-                data.__version = new Date().valueOf();
+                //data.__version = new Date().valueOf();
                 break;
               case 'POST':
                 config.data = config.data || {};

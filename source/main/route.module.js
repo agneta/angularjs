@@ -16,22 +16,13 @@
 */
 var app = angular.module('MainApp');
 
+function getViewURL(path) {
+  return agneta.urljoin({
+    path: [agneta.services.view, path, 'view']
+  });
+}
+
 app.config(function($routeProvider, $locationProvider) {
-
-  ////////////////////////////////////////////////////////////////////
-
-  function versionURL(path) {
-
-    return agneta.urljoin({
-      path: [agneta.services.view, path, 'view'],
-      query: {
-        version: agneta.page.version
-      }
-    });
-  }
-
-  ////////////////////////////////////////////////////////////////////
-
   var routePath = agneta.url('/:path*');
 
   $routeProvider
@@ -40,7 +31,7 @@ app.config(function($routeProvider, $locationProvider) {
     })
     .when('/', {
       templateUrl: function() {
-        var result = versionURL(agneta.lang);
+        var result = getViewURL(agneta.lang);
         return result;
       },
       reloadOnSearch: false,
@@ -52,7 +43,7 @@ app.config(function($routeProvider, $locationProvider) {
     })
     .when(routePath, {
       templateUrl: function(params) {
-        var result = versionURL(params.path);
+        var result = getViewURL(params.path);
         return result;
       },
       reloadOnSearch: false,
@@ -68,12 +59,10 @@ app.config(function($routeProvider, $locationProvider) {
 
   // use the HTML5 History API
   $locationProvider.html5Mode(true);
-
 });
 
-app.run(function($rootScope, $route, $timeout,$window, $location, Account, $mdDialog) {
-
-  $rootScope.changeLanguage = function(lang){
+app.run(function($rootScope, $timeout, $window, $location, $mdDialog) {
+  $rootScope.changeLanguage = function(lang) {
     var url = agneta.langPath({
       path: $rootScope.viewData.path,
       lang: lang
@@ -82,16 +71,18 @@ app.run(function($rootScope, $route, $timeout,$window, $location, Account, $mdDi
   };
 
   $rootScope.$on('$routeChangeStart', function() {
-
     $rootScope.loadingMain = true;
     var searchData = $location.search();
     delete searchData.version;
     $location.search(searchData);
-
   });
 
-  $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
-
+  $rootScope.$on('$routeChangeError', function(
+    event,
+    current,
+    previous,
+    rejection
+  ) {
     if (rejection.unauthorized) {
       $mdDialog.open({
         partial: 'unauthorized',
@@ -112,10 +103,10 @@ app.run(function($rootScope, $route, $timeout,$window, $location, Account, $mdDi
       nested: true,
       data: {
         title: 'Unable to load page',
-        content: 'The location provided could not load\nReason: '+rejection.message
+        content:
+          'The location provided could not load\nReason: ' + rejection.message
       }
     });
-
   });
 
   $rootScope.$on('$routeChangeSuccess', function(event, current) {
@@ -131,10 +122,10 @@ app.run(function($rootScope, $route, $timeout,$window, $location, Account, $mdDi
     // Check if link has an anchor and scroll to that elmYPosition
 
     var hash = $location.hash();
-    if(hash){
-      $timeout(function(){
+    if (hash) {
+      $timeout(function() {
         $rootScope.scrollTo(hash);
-      },300);
+      }, 300);
     }
 
     //
@@ -149,10 +140,10 @@ app.run(function($rootScope, $route, $timeout,$window, $location, Account, $mdDi
 
     var data = current.locals.data;
 
-    $rootScope.addRouteParams = function(params){
+    $rootScope.addRouteParams = function(params) {
       var query = $location.search();
-      angular.extend(query,params);
-      $timeout(function(){
+      angular.extend(query, params);
+      $timeout(function() {
         $location.search(query).replace();
       });
     };
@@ -160,6 +151,34 @@ app.run(function($rootScope, $route, $timeout,$window, $location, Account, $mdDi
     $rootScope.viewData = data;
     $rootScope.loadingMain = false;
     $mdDialog.hide();
-
   });
+});
+
+app.directive('agInclude', function($compile, $rootScope, $templateRequest) {
+  return {
+    restrict: 'A',
+    link: function($scope, $element, $attrs) {
+      $attrs.$observe('page', function(page) {
+        console.log(page);
+        if (!page) {
+          return;
+        }
+        page = `${agneta.lang}/${page}`;
+
+        var viewURL = getViewURL(page);
+
+        return $rootScope
+          .loadData(page)
+          .then(function() {
+            return $templateRequest(viewURL);
+          })
+          .then(function(html) {
+            var DOM = angular.element(html);
+            var $e = $compile(DOM)($scope);
+            $element.empty();
+            $element.append($e);
+          });
+      });
+    }
+  };
 });

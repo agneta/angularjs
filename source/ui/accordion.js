@@ -18,24 +18,24 @@
   var activeScope;
   var scopeCount = 0;
 
-  agneta.directive("AgMenuItemCtrl", function($element, $timeout) {
+  agneta.directive('AgMenuItemCtrl', function($element, $timeout) {
     var vm = this;
     vm.expanded = false;
     vm.id = scopeCount++;
     var element = $element[0];
-    var list = element.querySelector(".list");
-    vm.$watch("expanded", function() {
+    var list = element.querySelector('.list');
+    vm.$watch('expanded', function() {
       if (vm.expanded) {
-        list.style.transition = "none";
-        list.style["margin-top"] = -list.offsetHeight;
+        list.style.transition = 'none';
+        list.style['margin-top'] = -list.offsetHeight;
         $timeout(function() {
           list.style.transition = null;
-          list.style["margin-top"] = null;
+          list.style['margin-top'] = null;
         }, 100);
         vm.expandedClass = true;
       } else {
         if (list.offsetHeight > 0) {
-          list.style["margin-top"] = -list.offsetHeight;
+          list.style['margin-top'] = -list.offsetHeight;
         }
         $timeout(function() {
           vm.expandedClass = false;
