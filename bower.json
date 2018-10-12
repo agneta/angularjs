@@ -9,6 +9,7 @@
   "dependencies": {
     "quill.tar": "https://github.com/quilljs/quill/releases/download/v1.3.5/quill.tar.gz",
     "angular": "1.7.4",
+    "shuffle": "git@github.com:Vestride/Shuffle.git",
     "angular-animate": "1.7.4",
     "angular-cookies": "1.7.4",
     "angular-aria": "1.7.4",
