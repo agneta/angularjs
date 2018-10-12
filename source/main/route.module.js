@@ -158,6 +158,8 @@ app.directive('agInclude', function($compile, $rootScope, $templateRequest) {
   return {
     restrict: 'A',
     link: function($scope, $element, $attrs) {
+      var childScope;
+
       $attrs.$observe('page', function(page) {
         console.log(page);
         if (!page) {
@@ -167,6 +169,11 @@ app.directive('agInclude', function($compile, $rootScope, $templateRequest) {
 
         var viewURL = getViewURL(page);
 
+        if (childScope) {
+          childScope.$destroy();
+          childScope = undefined;
+        }
+
         return $rootScope
           .loadData(page)
           .then(function() {
@@ -174,9 +181,15 @@ app.directive('agInclude', function($compile, $rootScope, $templateRequest) {
           })
           .then(function(html) {
             var DOM = angular.element(html);
-            var $e = $compile(DOM)($scope);
+
+            childScope = $scope.$new();
+            childScope.$on('$destroy', function() {
+              compiledElement.remove();
+            });
+
+            var compiledElement = $compile(DOM)(childScope);
             $element.empty();
-            $element.append($e);
+            $element.append(compiledElement);
           });
       });
     }
