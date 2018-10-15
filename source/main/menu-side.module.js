@@ -15,18 +15,18 @@
  *   limitations under the License.
  */
 
-var app = angular.module("MainApp");
+var app = angular.module('MainApp');
 var menu;
 
 app.run(function($rootScope) {
-  Object.defineProperty($rootScope, "hasMenu", {
+  Object.defineProperty($rootScope, 'hasMenu', {
     get: function() {
       return Boolean(menu);
     }
   });
 });
 
-app.directive("agMenuSide", function(
+app.directive('agMenuSide', function(
   $rootScope,
   $timeout,
   $route,
@@ -43,7 +43,7 @@ app.directive("agMenuSide", function(
           locked = current && current.locals.data.menuLock;
           //contentElement.empty();
 
-          if ($mdMedia("gt-sm")) {
+          if ($mdMedia('gt-sm')) {
             if (locked) {
               menu.show();
             } else {
@@ -63,7 +63,7 @@ app.directive("agMenuSide", function(
       }
 
       vm.menuLock = function() {
-        menu.isLocked = locked && $mdMedia("gt-sm");
+        menu.isLocked = locked && $mdMedia('gt-sm');
         if (menu.isLocked) {
           menu.showing = true;
         }
@@ -83,17 +83,15 @@ app.directive("agMenuSide", function(
       };
 
       vm.close = function() {
-        menu.hide().then(function() {
-          $log.debug("Navigation close is done");
-        });
+        menu.hide();
       };
     }
   };
 });
 
-app.directive("mdMenu", function() {
+app.directive('mdMenu', function() {
   return {
-    require: "^mdMenu",
+    require: '^mdMenu',
     link: function(scope, elm, attr, ctrl) {
       // now I can expose what I need to the scope
       scope.$mdCloseMenu = ctrl.close;
