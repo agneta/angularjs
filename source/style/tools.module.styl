@@ -1,6 +1,11 @@
-#tools{
+#tools {
     position: fixed;
     bottom: 10px;
     z-index: 65;
     right: 20px;
+    pointer-events: none;
+
+    >* {
+        pointer-events: auto;
+    }
 }
