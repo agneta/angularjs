@@ -1,35 +1,51 @@
 <%-template('./toolbar')%>
 
 <%
-var parent;
-var siblings;
-  if(page.parentPath){
-  parent = get_page(page.parentPath);
-  siblings = site.pages.find({
-    parentPath: '/'
-  });
-  }
-
-  var children = site.pages.find({
-    parentPath: page.pathSource
-  });
+var menu = config.menu || {};
+console.log(menu);
 %>
-<div class="sidebar-default">
-  <%if(children.count()){%>
-  <%children.forEach(function(item){
+
+<a ng-href="<%-get_path('/')%>"
+  class="brand">
+  <div layout="column">
+    <%if(menu.image){%>
+    <div class="logo"
+      style="background-image:url('<%-get_media(menu.image)%>')">
+    </div>
+    <%}%>
+
+    <%if(menu.icon){%>
+    <md-icon class="icon"
+      md-svg-src="<%-get_media(menu.icon)%>">
+    </md-icon>
+    <%}%>
+
+    <%if(menu.title){%>
+    <h2 class="title">
+      <%-lng(config.title)%>
+    </h2>
+    <%}%>
+  </div>
+</a>
+
+<%
+  var items = get_data('sidebar/menu');
+  if(!items){
+items = site.pages.find({
+parentPath: '/'
+}).toArray();
+  }
+%>
+<div class="menu-list">
+  <%if(items.length){%>
+  <%items.forEach(function(item){
+    var itemTemplate = 'ui/menu/item';
+    if(item.type){
+      itemTemplate += `-${item.type}`;
+    }
       %>
-  <%-template('sidebar/item',{item:item})%>
+  <%-template(itemTemplate,{item:item})%>
   <%})%>
-  <%if(parent){%>
-  <p class="heading md-padding">
-    <%-lng(parent.title)%>
-  </p>
   <%}%>
-  <%}%>
-  <%
-  if(siblings){
-    siblings.forEach(function(item){
-      %>
-  <%-template('./item',{item:item})%>
-  <%})}%>
+
 </div>

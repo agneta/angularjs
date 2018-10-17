@@ -1,18 +1,52 @@
 #menu-main {
   position: absolute;
+  box-shadow: 0 2px 40px #545454;
+  background: #f8f8f8;
+
+  .brand {
+    text-align: center;
+    padding: 10px;
+
+    .logo {
+      width: 160px;
+      height: 160px;
+      margin: auto;
+    }
+
+    .icon {
+      margin: auto;
+      color: color-primary;
+      width: 100px;
+      height: 100px;
+    }
+
+    .title {
+      color: color-primary;
+    }
+
+    .image {
+      display: block;
+      height: 90%;
+      width: auto;
+    }
+  }
+}
+
+#menu-page {
+  box-shadow: 0px 2px 13px #4c4c4c;
+  background: rgb(237, 237, 237);
 }
 
 #view-content>.menu {
   z-index: 9999;
   width: 300px;
   transition: transform 400ms ease;
-  transform: translateX(-100%);
+  transform: translateX(-110%);
   top: 0;
   bottom: 0;
   overflow: hidden;
   min-width: 280px;
   max-width: 90%;
-  background: #f9f9f9eb;
 
   &.showing {
     transform: translateX(0);
@@ -57,7 +91,7 @@
   }
 }
 
-.sidebar-default {
+.menu-list {
   .heading {
     background: color-primary;
     color: white;
