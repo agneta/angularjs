@@ -1,0 +1,56 @@
+<%
+var tag = viewTag();
+var footerShow = !config.footerHidden && !page.hiddenFooter;
+var viewClass = '';
+if(!footerShow){
+	viewClass+='footer-hidden';
+}
+%>
+<div <%-tag%> id="view-content" layout="row" ng-keypress="viewData.keypress && onKeyPress($event)" flex
+	layout-align="start stretch">
+
+	<%
+	var templateSidebar = page.templateSource + '.sidebar';
+	if (_.isString(page.sidebar)) {
+		templateSidebar = page.sidebar;
+	}
+	if (!has_template(templateSidebar)) {
+		templateSidebar = path.join(page.templateSource, 'index.sidebar');
+	}
+	if (has_template(templateSidebar)) {
+	%>
+
+	<%-template('ui/menu',{
+			id: 'menu-page',
+			name: 'page',
+			content: templateSidebar
+		})%>
+	<%}%>
+
+	<%-template('ui/menu',{
+		id: 'menu-main',
+		name: 'main',
+		content: 'ui/menu/main'
+	})%>
+
+
+
+	<md-content id="view-scroller"
+	 flex>
+		<div class="view-container <%-viewClass%>"
+		 layout="column">
+			<%-template(page.template || page.templateSource)%>
+			<%if(footerShow){%>
+			<%-template('layout/footer',null) %>
+			<%}%>
+		</div>
+		<div id="tools"
+		 layout="column">
+			<%-template('ui/scroll-top')%>
+			<%-template('ui/contact')%>
+		</div>
+	</md-content>
+
+</div>
+
+<%-template('layout/templates')%>

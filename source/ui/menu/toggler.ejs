@@ -1,0 +1,10 @@
+<%
+var model = `menu.${locals.type}`;
+%>
+<md-button aria-label="menu"
+    ng-show="<%-model%> && !<%-model%>.isLocked"
+    ng-click="<%-model%>.toggle()">
+    <md-icon md-svg-src="{{<%-model%>.icon}}"></md-icon>
+    <span>
+        <%-lng(locals.title)%></span>
+</md-button>

@@ -1,10 +1,12 @@
+<%-template('./toolbar')%>
+
 <%
 var parent;
 var siblings;
   if(page.parentPath){
   parent = get_page(page.parentPath);
   siblings = site.pages.find({
-    parentPath: page.parentPath
+    parentPath: '/'
   });
   }
 
@@ -14,20 +16,20 @@ var siblings;
 %>
 <div class="sidebar-default">
   <%if(children.count()){%>
-    <%children.forEach(function(item){
+  <%children.forEach(function(item){
       %>
-      <%-template('sidebar/item',{item:item})%>
-    <%})%>
-    <%if(parent){%>
-    <p class="heading md-padding">
-      <%-lng(parent.title)%>
-    </p>
-    <%}%>
+  <%-template('sidebar/item',{item:item})%>
+  <%})%>
+  <%if(parent){%>
+  <p class="heading md-padding">
+    <%-lng(parent.title)%>
+  </p>
+  <%}%>
   <%}%>
   <%
   if(siblings){
     siblings.forEach(function(item){
       %>
-    <%-template('sidebar/item',{item:item})%>
+  <%-template('./item',{item:item})%>
   <%})}%>
 </div>

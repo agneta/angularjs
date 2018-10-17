@@ -1,0 +1,31 @@
+<%
+locals.toolbar = locals.toolbar || {};
+if(locals.toolbar.href){
+var href = locals.toolbar.href?'href="'+locals.toolbar.href+'"':null;
+}
+%>
+
+<div layout="row"
+ class="ag-margin toolbar"
+ layout-align="start center">
+
+	<%
+		if(page.parentPath){
+		var parentPage = get_page(page.parentPath);
+		if(parentPage && parentPage.parentPath && parentPage.path!='/'){
+		%>
+
+	<md-button class="md-icon-button"
+	 ng-href="<%-get_path(parentPage)%>">
+		<md-icon md-svg-src="<%-get_icon('material/keyboard-arrow-left')%>"></md-icon>
+	</md-button>
+
+
+	<%}}%>
+
+	<span flex="auto"></span>
+
+
+	<%-template('layout/languages')%>
+
+</div>

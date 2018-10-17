@@ -24,53 +24,61 @@ app.run(function($rootScope) {
       return Boolean(menu);
     }
   });
+
+  $rootScope.$on('$routeChangeSuccess', function() {
+    $rootScope.menu = {};
+  });
+
+  $rootScope.menu = {};
 });
 
 app.directive('agMenuSide', function(
   $rootScope,
   $timeout,
   $route,
-  $mdMedia,
-  $log
+  $window,
+  $mdMedia
 ) {
   return {
-    link: function(vm) {
+    scope: true,
+    link: function(vm, elm, attrs) {
+      if (!attrs.name) {
+        console.error('Ag Menu needs a name on element:', elm);
+        return;
+      }
       var locked = false;
-      var menu = ($rootScope.menu = {});
+      var menu = (vm.menu = {
+        isLocked: true
+      });
 
-      function onRoute(event, current) {
-        $timeout(function() {
-          locked = current && current.locals.data.menuLock;
-          //contentElement.empty();
-
-          if ($mdMedia('gt-sm')) {
-            if (locked) {
-              menu.show();
-            } else {
-              remove();
-            }
-          }
-        }, 10);
-      }
-
-      onRoute(null, $route.current);
-
-      function remove() {
-        menu.hide();
-        $timeout(function() {
-          vm.sidebarHTML = null;
-        }, 1400);
-      }
-
-      vm.menuLock = function() {
-        menu.isLocked = locked && $mdMedia('gt-sm');
-        if (menu.isLocked) {
-          menu.showing = true;
+      function lockUpdate() {
+        if (attrs.name == 'main') {
+          menu.isLocked = false;
+          return;
         }
-        return menu.isLocked;
-      };
+        $timeout(function() {
+          var route = $route.current;
+          locked = route && route.locals.data.menuLock;
+          menu.isLocked = locked && $mdMedia('gt-sm');
+          if (menu.isLocked) {
+            menu.showing = true;
+          }
+        }, 300);
+      }
+
+      lockUpdate();
+
+      angular.element($window).bind('resize', lockUpdate);
+
+      vm.$watch('menu.showing', function(value) {
+        var icon = value ? 'material/close' : 'material/menu';
+        menu.icon = agneta.get_icon(icon);
+      });
 
       menu.toggle = function() {
+        if (menu.isLocked) {
+          return;
+        }
         return (menu.showing = !menu.showing);
       };
 
@@ -79,12 +87,17 @@ app.directive('agMenuSide', function(
       };
 
       menu.hide = function() {
+        if (menu.isLocked) {
+          return;
+        }
         return (menu.showing = false);
       };
 
       vm.close = function() {
         menu.hide();
       };
+
+      $rootScope.menu[attrs.name] = vm.menu;
     }
   };
 });

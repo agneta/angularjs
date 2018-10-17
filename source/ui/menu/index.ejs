@@ -1,0 +1,14 @@
+<div id="<%-locals.id%>"
+    class="menu"
+    name="<%-locals.name%>"
+    ag-menu-side
+    class="view-wrapper md-sidenav-left"
+    ng-class="{unlocked:!menu.isLocked,lock:menu.isLocked,showing:menu.showing}"
+    layout="column">
+    <div layout="column"
+        flex="auto">
+        <md-content flex="100">
+            <%-template(locals.content)%>
+        </md-content>
+    </div>
+</div>
