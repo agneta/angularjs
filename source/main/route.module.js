@@ -62,7 +62,6 @@ app.config(function($routeProvider, $locationProvider) {
 });
 
 app.run(function($rootScope, $timeout, $window, $route, $location, $mdDialog) {
-  var locationOriginal = $location.path;
   var nonLoading = false;
 
   $rootScope.changeLanguage = function(lang) {
@@ -83,17 +82,16 @@ app.run(function($rootScope, $timeout, $window, $route, $location, $mdDialog) {
     $location.search(searchData);
   });
 
-  $location.path = function(path, reload) {
-    if (reload === false) {
-      nonLoading = true;
-      var lastRoute = $route.current;
-      var un = $rootScope.$on('$locationChangeSuccess', function() {
-        $route.current = lastRoute;
-        nonLoading = false;
-        un();
-      });
-    }
-    return locationOriginal.apply($location, [path]);
+  $location.pathUpdate = function(path) {
+    nonLoading = true;
+    var lastRoute = $route.current;
+    var un = $rootScope.$on('$locationChangeSuccess', function() {
+      $route.current = lastRoute;
+      nonLoading = false;
+      un();
+    });
+    $location.replace();
+    return $location.path(path);
   };
 
   $rootScope.$on('$routeChangeError', function(rejection) {
