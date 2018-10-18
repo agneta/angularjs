@@ -83,6 +83,9 @@ app.run(function($rootScope, $timeout, $window, $route, $location, $mdDialog) {
   });
 
   $location.pathUpdate = function(path) {
+    if (path == $location.path()) {
+      return;
+    }
     nonLoading = true;
     var lastRoute = $route.current;
     var un = $rootScope.$on('$locationChangeSuccess', function() {
