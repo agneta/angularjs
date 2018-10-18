@@ -15,12 +15,12 @@
 *   limitations under the License.
 */
 
-
 require('main/promise.module');
 require('main/helpers.module');
 
 var agneta = window.agneta;
-var app = window.angular.module('MainApp',
+var app = window.angular.module(
+  'MainApp',
   agneta.deps.concat(['angular-q-limit'])
 );
 
@@ -28,7 +28,6 @@ var app = window.angular.module('MainApp',
 var injector = angular.injector(['ng']);
 
 (function() {
-
   var directives = {};
   var overrides = {};
 
@@ -62,7 +61,6 @@ var injector = angular.injector(['ng']);
   };
 
   agneta.extend = function(vm, directiveName, override) {
-
     directiveName = fixName(directiveName);
     var directive = directives[directiveName];
 
@@ -71,12 +69,18 @@ var injector = angular.injector(['ng']);
       return;
     }
 
-    directive.link.apply(vm,
-      argInjectors(directive.parameters,
-        angular.extend({
-          data: {}
-        }, override)
-      ));
+    directive.link.apply(
+      vm,
+      argInjectors(
+        directive.parameters,
+        angular.extend(
+          {
+            data: {}
+          },
+          override
+        )
+      )
+    );
   };
 
   agneta.directive = function(name, link) {
@@ -102,14 +106,13 @@ var injector = angular.injector(['ng']);
     };
 
     angular.module('MainApp').directive(name, function() {
-
       return {
         restrict: 'A',
         link: function(vm, elm, attrs) {
           if (link) {
             var override = {
-              '$element': elm,
-              '$attrs': attrs
+              $element: elm,
+              $attrs: attrs
             };
             if (overrides[name]) {
               angular.extend(override, overrides[name]);
@@ -119,20 +122,19 @@ var injector = angular.injector(['ng']);
         }
       };
     });
-
   };
 
-  var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+  var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
   var ARGUMENT_NAMES = /([^\s,]+)/g;
 
   function getParamNames(func) {
     var fnStr = func.toString().replace(STRIP_COMMENTS, '');
-    var result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
-    if (result === null)
-      result = [];
+    var result = fnStr
+      .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+      .match(ARGUMENT_NAMES);
+    if (result === null) result = [];
     return result;
   }
-
 })();
 
 //---------------------------------------------------------------
@@ -145,157 +147,161 @@ app.factory('$exceptionHandler', function() {
 
 //---------------------------------------------------------------
 
+app
+  .config(function($mdThemingProvider, $sceDelegateProvider, $mdAriaProvider) {
+    $mdAriaProvider.disableWarnings();
 
-app.config(function($mdThemingProvider, $sceDelegateProvider, $mdAriaProvider) {
+    // Not using this because it does not display errors in promise chains
+    //$qProvider.errorOnUnhandledRejections(false);
 
-  $mdAriaProvider.disableWarnings();
+    var trustList = [
+      'self',
+      agneta.services.url + '/**',
+      agneta.server.media + '/**',
+      agneta.server.lib + '/**'
+    ];
+    $sceDelegateProvider.resourceUrlWhitelist(trustList);
 
-  // Not using this because it does not display errors in promise chains
-  //$qProvider.errorOnUnhandledRejections(false);
+    //////////////////////////////////////////////////////////////
+    // Theme
+    //////////////////////////////////////////////////////////////
 
-  var trustList = [
-    'self',
-    agneta.services.url + '/**',
-    agneta.server.media + '/**',
-    agneta.server.lib + '/**'
-  ];
-  $sceDelegateProvider.resourceUrlWhitelist(trustList);
+    function definePalette(name, color) {
+      var lum = agneta.colorLuminance;
 
-  //////////////////////////////////////////////////////////////
-  // Theme
-  //////////////////////////////////////////////////////////////
+      $mdThemingProvider.definePalette(name, {
+        '50': lum(color, -0.5),
+        '100': lum(color, -0.4),
+        '200': lum(color, -0.3),
+        '300': lum(color, -0.2),
+        '400': lum(color, -0.1),
+        '500': lum(color, 0),
+        '600': lum(color, 0.05),
+        '700': lum(color, 0.1),
+        '800': lum(color, 0.15),
+        '900': lum(color, 0.2),
+        A100: lum(color, 0.25),
+        A200: lum(color, 0.3),
+        A400: lum(color, 0.25),
+        A700: lum(color, 0.3),
+        contrastDefaultColor: 'light', // whether, by default, text (contrast)
+        // on this palette should be dark or light
+        contrastDarkColors: [
+          '50',
+          '100', //hues which contrast should be 'dark' by default
+          '200',
+          '300',
+          '400',
+          'A100'
+        ],
+        contrastLightColors: undefined // could also specify this if default was 'dark'
+      });
+    }
 
-  function definePalette(name, color) {
+    definePalette('primary', agneta.theme.primary);
+    definePalette('accent', agneta.theme.accent);
 
-    var lum = agneta.colorLuminance;
+    $mdThemingProvider
+      .theme('default')
+      .primaryPalette('primary')
+      .accentPalette('accent', {
+        default: '500'
+      })
+      .warnPalette('red');
+  })
+  .run(function(
+    $mdMedia,
+    $rootScope,
+    $injector,
+    $ocLazyLoad,
+    $location,
+    $mdDialog
+  ) {
+    $location.path(agneta.url(agneta.path), false);
+    injector = $injector;
 
-    $mdThemingProvider.definePalette(name, {
-      '50': lum(color, -0.5),
-      '100': lum(color, -0.4),
-      '200': lum(color, -0.3),
-      '300': lum(color, -0.2),
-      '400': lum(color, -0.1),
-      '500': lum(color, 0),
-      '600': lum(color, 0.05),
-      '700': lum(color, 0.1),
-      '800': lum(color, 0.15),
-      '900': lum(color, 0.2),
-      'A100': lum(color, 0.25),
-      'A200': lum(color, 0.3),
-      'A400': lum(color, 0.25),
-      'A700': lum(color, 0.3),
-      'contrastDefaultColor': 'light', // whether, by default, text (contrast)
-      // on this palette should be dark or light
-      'contrastDarkColors': ['50', '100', //hues which contrast should be 'dark' by default
-        '200', '300', '400', 'A100'
-      ],
-      'contrastLightColors': undefined // could also specify this if default was 'dark'
-    });
+    if (agneta.locale) {
+      $ocLazyLoad.load({
+        files: [
+          agneta.get_asset(
+            'lib/angular-i18n/angular-locale_' + agneta.locale + '.js'
+          )
+        ]
+      });
+    }
 
-  }
+    ////////////////////////////////////////////////////////////////
 
-  definePalette('primary', agneta.theme.primary);
-  definePalette('accent', agneta.theme.accent);
+    $rootScope.$mdMedia = $mdMedia;
 
-  $mdThemingProvider.theme('default')
-    .primaryPalette('primary')
-    .accentPalette('accent', {
-      default: '500'
-    })
-    .warnPalette('red');
-
-}).run(function($mdMedia, $http, Account, $rootScope, $injector, $ocLazyLoad, $route, $timeout, $location, $mdSidenav, $q, $log, $mdDialog) {
-
-  $location.path(agneta.url(agneta.path), false);
-  injector = $injector;
-
-  if(agneta.locale){
-    $ocLazyLoad.load({
-      files: [
-        agneta.get_asset('lib/angular-i18n/angular-locale_'+agneta.locale+'.js')
-      ]
-    });
-  }
-
-  ////////////////////////////////////////////////////////////////
-
-
-  $rootScope.$mdMedia = $mdMedia;
-
-  $rootScope.mediaClass = function() {
-    var result = [];
-    var check = ['xs', 'sm', 'md', 'gt-xs', 'gt-sm', 'gt-md'];
-    for (var key in check) {
-      var item = check[key];
-      if ($mdMedia(item)) {
-        result.push('media-' + item);
+    $rootScope.mediaClass = function() {
+      var result = [];
+      var check = ['xs', 'sm', 'md', 'gt-xs', 'gt-sm', 'gt-md'];
+      for (var key in check) {
+        var item = check[key];
+        if ($mdMedia(item)) {
+          result.push('media-' + item);
+        }
       }
-    }
-    return result.join(' ');
-  };
+      return result.join(' ');
+    };
 
-  ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
 
-  $rootScope.modalFrame = function(source) {
+    $rootScope.modalFrame = function(source) {
+      $mdDialog.open({
+        data: {
+          source: source
+        },
+        partial: 'iframe'
+      });
+    };
 
-    $mdDialog.open({
-      data: {
-        source: source
-      },
-      partial: 'iframe'
-    });
+    ////////////////////////////////////////////////////////////////
+    $rootScope.playVideo = function(sources) {
+      $rootScope.dialog({
+        partial: 'video',
+        data: {
+          sources: sources
+        }
+      });
+    };
 
-  };
+    ////////////////////////////////////////////////////////////////
 
-  ////////////////////////////////////////////////////////////////
-  $rootScope.playVideo = function(sources) {
-
-    $rootScope.dialog({
-      partial: 'video',
-      data: {
-        sources: sources
+    $rootScope.pageTitle = function() {
+      if (!$rootScope.viewData) {
+        return agneta.title;
       }
-    });
+      return agneta.title + ' | ' + $rootScope.viewData.title;
+    };
 
-  };
+    ////////////////////////////////////////////////////////////////
 
-  ////////////////////////////////////////////////////////////////
+    $rootScope.urlActive = function(viewLocation) {
+      return viewLocation === $location.path();
+    };
 
-  $rootScope.pageTitle = function() {
-    if (!$rootScope.viewData) {
-      return agneta.title;
-    }
-    return agneta.title + ' | ' + $rootScope.viewData.title;
-  };
+    $rootScope.urlActiveClass = function(viewLocation) {
+      if ($rootScope.urlActive(viewLocation)) {
+        return 'active';
+      } else {
+        return '';
+      }
+    };
 
-  ////////////////////////////////////////////////////////////////
+    $rootScope.get_media = agneta.get_media;
+    $rootScope.get_asset = agneta.get_asset;
+    $rootScope.get_icon = agneta.get_icon;
+    $rootScope.get_path = agneta.langPath;
 
-  $rootScope.urlActive = function(viewLocation) {
-    return viewLocation === $location.path();
-  };
+    $rootScope.url = agneta.url;
+    $rootScope.lng = agneta.lng;
 
-  $rootScope.urlActiveClass = function(viewLocation) {
-    if ($rootScope.urlActive(viewLocation)) {
-      return 'active';
-    } else {
-      return '';
-    }
-  };
-
-  $rootScope.get_media = agneta.get_media;
-  $rootScope.get_asset = agneta.get_asset;
-  $rootScope.get_icon = agneta.get_icon;
-  $rootScope.get_path = agneta.langPath;
-
-
-  $rootScope.url = agneta.url;
-  $rootScope.lng = agneta.lng;
-
-  $rootScope.loggedClass = function() {
-    return $rootScope.account.profile ? 'logged-in' : 'logged-out';
-  };
-
-});
+    $rootScope.loggedClass = function() {
+      return $rootScope.account.profile ? 'logged-in' : 'logged-out';
+    };
+  });
 
 require('main/socket.module');
 require('main/template-literal.module');
@@ -312,6 +318,4 @@ require('main/interceptors.module');
 require('main/account.module');
 require('main/menu-context.module');
 
-document.dispatchEvent(
-  new Event('agneta-ready')
-);
+document.dispatchEvent(new Event('agneta-ready'));

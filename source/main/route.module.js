@@ -61,7 +61,10 @@ app.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
 });
 
-app.run(function($rootScope, $timeout, $window, $location, $mdDialog) {
+app.run(function($rootScope, $timeout, $window, $route, $location, $mdDialog) {
+  var locationOriginal = $location.path;
+  var nonLoading = false;
+
   $rootScope.changeLanguage = function(lang) {
     var url = agneta.langPath({
       path: $rootScope.viewData.path,
@@ -71,18 +74,29 @@ app.run(function($rootScope, $timeout, $window, $location, $mdDialog) {
   };
 
   $rootScope.$on('$routeChangeStart', function() {
+    if (nonLoading) {
+      return;
+    }
     $rootScope.loadingMain = true;
     var searchData = $location.search();
     delete searchData.version;
     $location.search(searchData);
   });
 
-  $rootScope.$on('$routeChangeError', function(
-    event,
-    current,
-    previous,
-    rejection
-  ) {
+  $location.path = function(path, reload) {
+    if (reload === false) {
+      nonLoading = true;
+      var lastRoute = $route.current;
+      var un = $rootScope.$on('$locationChangeSuccess', function() {
+        $route.current = lastRoute;
+        nonLoading = false;
+        un();
+      });
+    }
+    return locationOriginal.apply($location, [path]);
+  };
+
+  $rootScope.$on('$routeChangeError', function(rejection) {
     if (rejection.unauthorized) {
       $mdDialog.open({
         partial: 'unauthorized',
