@@ -1,0 +1,4 @@
+name: "description"
+title:
+  en: Description
+type: "text-rich"
