@@ -7,7 +7,7 @@ var item = {
 };
 
 if(data.page){
-  var itemPage = get_page(data.page);
+  var itemPage = await get_page(data.page);
   if(itemPage){
   item.title = itemPage.title;
   item.path = itemPage.path;

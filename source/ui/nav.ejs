@@ -17,13 +17,16 @@ if(!nav){
   }
 }
 %>
-<div class="ui-nav md-padding" layout="row" layout-wrap layout-align="left center">
-<%
+<div class="ui-nav md-padding"
+  layout="row"
+  layout-wrap
+  layout-align="left center">
+  <%
 for(var i in nav){
   var pageItem;
   var item = nav[i];
   if(_.isString(item)){
-    pageItem = get_page(item);
+    pageItem = await get_page(item);
     if(pageItem){
       item = {
         title: pageItem.title,
@@ -36,7 +39,7 @@ for(var i in nav){
     }
   }
   if(item.page){
-    pageItem = get_page(item.page);
+    pageItem = await get_page(item.page);
     if(pageItem){
       item.title = pageItem.title;
       item.path = pageItem.path;
@@ -51,10 +54,12 @@ for(var i in nav){
   }
   if(i!=0){
     %>
-    <md-icon md-svg-src="<%-get_icon('material/keyboard-arrow-right')%>"></md-icon>
-    <%}%>
-    <a <%-attr%> ng-href="<%-get_path(item.pathSource||item)%>"><%-lng(item.title)%></a>
-    <%}%>
-    <span flex>
-    </span>
-  </div>
+  <md-icon md-svg-src="<%-get_icon('material/keyboard-arrow-right')%>"></md-icon>
+  <%}%>
+  <a <%-attr%> ng-href="
+    <%-get_path(item.pathSource||item)%>">
+    <%-lng(item.title)%></a>
+  <%}%>
+  <span flex>
+  </span>
+</div>

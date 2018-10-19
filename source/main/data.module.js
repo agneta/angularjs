@@ -16,40 +16,35 @@
  */
 var app = window.angular.module('MainApp');
 
-app.run(function(
-  $rootScope,
-  $http,
-  $route,
-  $q,
-  $ocLazyLoad
-) {
-
+app.run(function($rootScope, $http, $route, $q, $ocLazyLoad) {
   $rootScope.loadData = function(options) {
-
     var path;
     var filter;
     var params = $route.current.params;
 
-    if(angular.isObject(options)){
+    if (angular.isObject(options)) {
       path = options.path;
       filter = options.filter;
-    }else{
+    } else {
       path = options;
     }
 
     path = path || params.path;
 
-    var dataPath = agneta.urljoin(agneta.services.view, path, 'view-data');
+    var dataPath = agneta.urljoin({
+      path: [agneta.services.view, path],
+      query: { type: 'view-data' }
+    });
     var data;
 
-    return $http.get(dataPath,{
-      params:{
-        version: agneta.page.version,
-        __skipDialog: true
-      }
-    })
+    return $http
+      .get(dataPath, {
+        params: {
+          version: agneta.page.version,
+          __skipDialog: true
+        }
+      })
       .then(function(response) {
-
         data = app.pageData = response.data;
         var dependencies = data.dependencies || [];
         var priorityIndex = 0;
@@ -58,12 +53,12 @@ app.run(function(
         //----------------------------------------------
         // Filter Dependencies to load
 
-        if(filter){
+        if (filter) {
           var result = [];
-          for(var index in dependencies){
+          for (var index in dependencies) {
             var filtered = [];
-            for(var dep of dependencies[index]){
-              if(dep.indexOf(filter)>0){
+            for (var dep of dependencies[index]) {
+              if (dep.indexOf(filter) > 0) {
                 filtered.push(dep);
               }
             }
@@ -76,62 +71,49 @@ app.run(function(
         // Load page dependencies
 
         function loadPriority() {
-
           return $q(function(resolve) {
             resolve();
-          })
-            .then(function() {
+          }).then(function() {
+            var priority = dependencies[priorityIndex];
 
-              var priority = dependencies[priorityIndex];
+            if (!priority) {
+              return;
+            }
 
-              if (!priority) {
-                return;
+            priorityIndex++;
+
+            return $q(function(resolve) {
+              var options = {
+                name: 'MainApp',
+                files: priority
+              };
+
+              switch (agneta.env) {
+                case 'development':
+                  options.cache = false;
+                  break;
               }
 
-              priorityIndex++;
-
-              return $q(function(resolve) {
-
-                var options = {
-                  name: 'MainApp',
-                  files: priority
-                };
-
-                switch(agneta.env){
-                  case 'development':
-                    options.cache = false;
-                    break;
-                }
-
-                if (priority.length) {
-                  $ocLazyLoad.load([options]).then(resolve);
-
-                } else {
-                  resolve();
-                }
-
-              })
-                .then(loadPriority);
-            });
-
+              if (priority.length) {
+                $ocLazyLoad.load([options]).then(resolve);
+              } else {
+                resolve();
+              }
+            }).then(loadPriority);
+          });
         }
 
         //----------------------------------------------
         // Load angular modules
 
-
-        return loadPriority()
-          .then(function(){
-            if (data.inject && data.inject.length) {
-              $ocLazyLoad.inject(data.inject);
-            }
-          });
-
-
+        return loadPriority().then(function() {
+          if (data.inject && data.inject.length) {
+            $ocLazyLoad.inject(data.inject);
+          }
+        });
       })
       .then(function() {
         return data;
       });
   };
-
 });

@@ -11,7 +11,7 @@ var href = locals.toolbar.href?'href="'+locals.toolbar.href+'"':null;
 
 	<%
 		if(page.parentPath){
-		var parentPage = get_page(page.parentPath);
+		var parentPage = await get_page(page.parentPath);
 		if(parentPage && parentPage.parentPath && parentPage.path!='/'){
 		%>
 

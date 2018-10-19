@@ -13,7 +13,7 @@ for(item of list){
   var item_title = '';
 
   if(item.page){
-    var item_page = get_page(item.page);
+    var item_page = await get_page(item.page);
     item_title = get_title(item_page);
     href = get_path(item.page);
 
@@ -49,16 +49,16 @@ for(item of list){
   }
   %>
 
-    <%if(!item.hidden){%>
-        <%-await template(locals.itemPath,{
+<%if(!item.hidden){%>
+<%-await template(locals.itemPath,{
     item: item,
     href:href,
     target:target,
     click:click,
     item_title: item_title
   })%>
-            <%}%>
+<%}%>
 
-                <%
+<%
 }
 %>

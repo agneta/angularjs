@@ -18,7 +18,10 @@ var app = angular.module('MainApp');
 
 function getViewURL(path) {
   return agneta.urljoin({
-    path: [agneta.services.view, path, 'view']
+    path: [agneta.services.view, path],
+    query: {
+      type: 'view'
+    }
   });
 }
 
