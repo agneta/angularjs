@@ -33,7 +33,7 @@ app.run(function($rootScope, $http, $route, $q, $ocLazyLoad) {
 
     var dataPath = agneta.urljoin({
       path: [agneta.services.view, path],
-      query: { type: 'view-data' }
+      query: { type: 'viewData' }
     });
     var data;
 

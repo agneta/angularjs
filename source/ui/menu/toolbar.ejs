@@ -16,7 +16,7 @@ var href = locals.toolbar.href?'href="'+locals.toolbar.href+'"':null;
 		%>
 
 	<md-button class="md-icon-button"
-	 ng-href="<%-get_path(parentPage)%>">
+	 ng-href="<%-await get_path(parentPage)%>">
 		<md-icon md-svg-src="<%-get_icon('material/keyboard-arrow-left')%>"></md-icon>
 	</md-button>
 

@@ -3,11 +3,11 @@ var nav = locals.nav;
 
 if(!nav){
   nav = [page];
-  var home = site.pages.findOne({path:'/'});
+  var home = await site.pages.findOne({path:'/'});
   var item = page;
 
   while(item.parentPath && item.path!='/'){
-    var parent = site.pages.findOne({path:item.parentPath});
+    var parent = await site.pages.findOne({path:item.parentPath});
     if(parent){
       nav.unshift(parent);
       item = parent;
@@ -57,7 +57,7 @@ for(var i in nav){
   <md-icon md-svg-src="<%-get_icon('material/keyboard-arrow-right')%>"></md-icon>
   <%}%>
   <a <%-attr%> ng-href="
-    <%-get_path(item.pathSource||item)%>">
+    <%-await get_path(item.pathSource||item)%>">
     <%-lng(item.title)%></a>
   <%}%>
   <span flex>

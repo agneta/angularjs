@@ -4,7 +4,7 @@
 var menu = config.menu || {};
 %>
 
-<a ng-href="<%-get_path('/')%>"
+<a ng-href="<%-await get_path('/')%>"
   class="brand">
   <div layout="column">
     <%if(menu.image){%>
@@ -30,9 +30,9 @@ var menu = config.menu || {};
 <%
   var items = get_data('sidebar/menu');
   if(!items){
-items = site.pages.find({
+items = await site.pages.find({
 parentPath: '/'
-}).toArray();
+});
   }
 %>
 <div class="menu-list">
