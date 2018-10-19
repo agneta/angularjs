@@ -6,7 +6,7 @@
     layout="column"
     layout-align="center center">
     <p>Select a file from your computer.</p>
-    <%-template('dialog/account-file/upload-button',page.action.upload)%>
+    <%-await template('dialog/account-file/upload-button',page.action.upload)%>
   </div>
 
   <div ng-show="media.file"
@@ -20,7 +20,7 @@
     <div class="details ag-margin"
       layout="column">
 
-      <%-template('dialog/account-file/selection',page.sharing)%>
+      <%-await template('dialog/account-file/selection',page.sharing)%>
 
         <a href="{{media.url}}"
           target="_blank"
@@ -38,7 +38,7 @@
               aria-label="delete"></md-icon>
             <span>Delete</span>
           </md-button>
-          <%-template('dialog/account-file/upload-button',page.action.replace)%>
+          <%-await template('dialog/account-file/upload-button',page.action.replace)%>
         </div>
 
     </div>

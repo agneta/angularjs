@@ -20,14 +20,14 @@ if(!footerShow){
 	if (has_template(templateSidebar)) {
 	%>
 
-	<%-template('ui/menu',{
+	<%-await template('ui/menu',{
 			id: 'menu-page',
 			name: 'page',
 			content: templateSidebar
 		})%>
 	<%}%>
 
-	<%-template('ui/menu',{
+	<%-await template('ui/menu',{
 		id: 'menu-main',
 		name: 'main',
 		content: 'ui/menu/main'
@@ -39,18 +39,18 @@ if(!footerShow){
 	 flex>
 		<div class="view-container <%-viewClass%>"
 		 layout="column">
-			<%-template(page.template || page.templateSource)%>
+			<%-await template(page.template || page.templateSource)%>
 			<%if(footerShow){%>
-			<%-template('layout/footer',null) %>
+			<%-await template('layout/footer',null) %>
 			<%}%>
 		</div>
 		<div id="tools"
 		 layout="column">
-			<%-template('ui/scroll-top')%>
-			<%-template('ui/contact')%>
+			<%-await template('ui/scroll-top')%>
+			<%-await template('ui/contact')%>
 		</div>
 	</md-content>
 
 </div>
 
-<%-template('layout/templates')%>
+<%-await template('layout/templates')%>

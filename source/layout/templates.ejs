@@ -4,6 +4,6 @@ if(page.__templates){
     %>
 <script type="text/ng-template"
   id="<%-tmpl.id%>">
-    <%-template(tmpl.path,{data:tmpl.data})%>
+    <%-await template(tmpl.path,{data:tmpl.data})%>
     </script>
 <%}}%>

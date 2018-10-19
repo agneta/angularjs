@@ -1,5 +1,5 @@
 <div <%-field.attr%>>
-    <%
+  <%
   for(var fieldChild of field.fields){
   var attr = [];
 
@@ -14,6 +14,6 @@
 
   fieldChild.attr = attr.join(' ');
   %>
-        <%-template('form/'+fieldChild.group,{field:fieldChild})%>
-<%}%>
+  <%-await template('form/'+fieldChild.group,{field:fieldChild})%>
+  <%}%>
 </div>

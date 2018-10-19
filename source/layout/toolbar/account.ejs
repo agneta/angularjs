@@ -15,11 +15,11 @@
     <%if(config.account.register){%>
     <p class="message"><%-lng(data.signedOut.messageRegister)%></p>
     <%}%>
-    <%-template('ui/account-actions')%>
+    <%-await template('ui/account-actions')%>
   </div>
   <%if(has_path('account')){%>
   <div class="ag-margin md-padding" ng-show="account.profile" layout="column" layout-align="center center">
-    <%-template('ui/account-picture',{model:'account.profile'})%>
+    <%-await template('ui/account-picture',{model:'account.profile'})%>
     <p>{{account.profile.username || account.profile.email}}</p>
     <md-button class="bg-grey" ng-href="<%-get_path('account')%>">
       <%-lng(data.profile)%>

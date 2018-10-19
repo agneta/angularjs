@@ -3,20 +3,20 @@
 	<div class="md-toolbar-tools"
 	 ng-cloak>
 
-		<%-template('layout/toolbar/menu')%>
+		<%-await template('layout/toolbar/menu')%>
 
 		<%if(config.languages_toolbar){%>
-		<%-template('layout/languages')%>
+		<%-await template('layout/languages')%>
 		<%}%>
 
-		<%-template('ui/search')%>
+		<%-await template('ui/search')%>
 
 		<span class="flex"></span>
 
 		<div ng-include="viewData.toolbar">
 		</div>
 
-		<%-template('layout/toolbar/account')%>
+		<%-await template('layout/toolbar/account')%>
 
 	</div>
 </md-menu-toolbar>

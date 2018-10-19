@@ -1,6 +1,8 @@
 <%var tag = viewTag();%>
-<md-dialog <%-tag%> class="<%-page.class%>" aria-label="<%-lng(page.title)%>">
-<%-template(page.template)%>
+<md-dialog <%-tag%> class="
+    <%-page.class%>" aria-label="
+    <%-lng(page.title)%>">
+    <%-await template(page.template)%>
 </md-dialog>
 
-<%-template('layout/templates')%>
+<%-await template('layout/templates')%>

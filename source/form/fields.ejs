@@ -28,11 +28,14 @@ for(var fieldProp of form.fields){
 	}
 
 	%>
-    <div class="field <%-field.class%>" <%-ngShow%> <%-ngIf%> <%-field.attr_base%>>
-			<%if(field.group){%>
-        <%-template('form/'+field.group,data)%>
-			<%}%>
-    </div>
+<div class="field <%-field.class%>"
+ <%-ngShow%>
+	<%-ngIf%>
+	<%-field.attr_base%>>
+	<%if(field.group){%>
+	<%-await template('form/'+field.group,data)%>
+	<%}%>
+</div>
 <%
 }
 %>

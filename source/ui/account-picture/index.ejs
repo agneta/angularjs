@@ -13,7 +13,7 @@ ng-click="<%-locals.click%>"
 <%-ngStyle%>
 <%-attr%>
 aria-label="Account">
-<%-template('ui/account-picture/icon',locals)%>
+<%-await template('ui/account-picture/icon',locals)%>
 <div class="action" layout-align="center center" layout="column">
 <md-icon
 aria-label="edit account picture"
@@ -31,7 +31,7 @@ md-svg-src="<%-get_icon('material/edit')%>">
   <%-ngStyle%>
   class="<%-elmClass%>"
   >
-  <%-template('ui/account-picture/icon',locals)%>
+  <%-await template('ui/account-picture/icon',locals)%>
 
   </div>
 

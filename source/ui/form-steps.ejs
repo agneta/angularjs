@@ -5,19 +5,25 @@
 
 <div <%-tag%> class="md-padding steps md-margin ui-form-steps" layout-align="space-between start" align="center">
 
-  <div class="header" layout="row" layout-align="center">
-    <div class="numbers" layout="row">
+  <div class="header"
+    layout="row"
+    layout-align="center">
+    <div class="numbers"
+      layout="row">
       <%for(var index in data.steps){
     var step = data.steps[index];
     var number = Number(index) + 1;
     %>
-      <div class="number" ng-class="{active:currentStep=='<%-step.name%>'}"><%-number%></div>
-    <%}%>
+      <div class="number"
+        ng-class="{active:currentStep=='<%-step.name%>'}">
+        <%-number%>
+      </div>
+      <%}%>
+    </div>
   </div>
-</div>
-<div class="steps">
-  <%-template('ui/loader')%>
-<%for(var index in data.steps){
+  <div class="steps">
+    <%-await template('ui/loader')%>
+    <%for(var index in data.steps){
       var step = data.steps[index];
       var stepTemplate = path.join(data.formSteps.stepBase,step.name);
 
@@ -26,7 +32,7 @@
         stepTemplate: stepTemplate
       };
     %>
-<%-template('ui/form-steps/step',stepLocals)%>
-<%}%>
-</div>
+    <%-await template('ui/form-steps/step',stepLocals)%>
+    <%}%>
+  </div>
 </div>

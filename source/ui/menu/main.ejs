@@ -1,4 +1,4 @@
-<%-template('./toolbar')%>
+<%-await template('./toolbar')%>
 
 <%
 var menu = config.menu || {};
@@ -37,14 +37,14 @@ parentPath: '/'
 %>
 <div class="menu-list">
   <%if(items.length){%>
-  <%items.forEach(function(item){
+  <%for(item of items){
     var itemTemplate = 'ui/menu/item';
     if(item.type){
       itemTemplate += `-${item.type}`;
     }
       %>
-  <%-template(itemTemplate,{item:item})%>
-  <%})%>
+  <%-await template(itemTemplate,{item:item})%>
+  <%}%>
   <%}%>
 
 </div>

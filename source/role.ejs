@@ -4,8 +4,10 @@
       <%-lng(page.title)%>
     </h2>
     <span flex></span>
-    <md-button class="md-icon-button" ng-click="close()">
-      <md-icon md-svg-src=<%-get_icon( "material/close")%> aria-label="Cancel"></md-icon>
+    <md-button class="md-icon-button"
+      ng-click="close()">
+      <md-icon md-svg-src=<%-get_icon( "material/close"
+        )%> aria-label="Cancel"></md-icon>
     </md-button>
   </div>
 </md-toolbar>
@@ -14,17 +16,21 @@
   <p>
     <%-lng(page.message)%>
   </p>
-  <%-template('form',{form:page.form})%>
-    <%-template('ui/loader')%>
+  <%-await template('form',{form:page.form})%>
+  <%-await template('ui/loader')%>
 
 </md-dialog-content>
 
-<md-dialog-actions layout="row" md-whiteframe="2">
+<md-dialog-actions layout="row"
+  md-whiteframe="2">
   <span flex> </span>
   <md-button ng-click="close()">
     <%-lng('general.cancel')%>
   </md-button>
-  <md-button ng-click="update()" ng-disabled="formRole.$invalid" md-autofocus class="md-raised md-primary">
+  <md-button ng-click="update()"
+    ng-disabled="formRole.$invalid"
+    md-autofocus
+    class="md-raised md-primary">
     <%-lng('general.change')%>
   </md-button>
 </md-dialog-actions>

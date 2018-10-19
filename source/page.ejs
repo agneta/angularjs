@@ -1,9 +1,9 @@
 <%if(page.isViewData || page.isPartial){%>
-<%-template(page.template)%>
+<%-await template(page.template)%>
 <%}else if(page.isDialog){%>
-<%-template('page/dialog')%>
+<%-await template('page/dialog')%>
 <%}else if(page.isView){%>
-<%-template('page/view')%>
+<%-await template('page/view')%>
 <%}else{%>
-<%-template(page.template)%>
+<%-await template(page.template)%>
 <%}%>

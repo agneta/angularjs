@@ -31,14 +31,17 @@ if(item.path == page.pathSource){
 
 <%if(item.list){%>
 
-  <md-sidemenu-content md-heading="<%-lng(item.title)%>">
-    <%for(var item of item.list){%>
-    <%-template('ui/menu-expand-item',{data:item})%>
-    <%}%>
-  </md-sidemenu-content>
+<md-sidemenu-content md-heading="<%-lng(item.title)%>">
+  <%for(var item of item.list){%>
+  <%-await template('ui/menu-expand-item',{data:item})%>
+  <%}%>
+</md-sidemenu-content>
 
 <%}else{%>
 
-    <md-sidemenu-button class="<%-item.classActive%>" ng-href="<%-item.href%>"><%-lng(item.title)%></md-sidemenu-button>
+<md-sidemenu-button class="<%-item.classActive%>"
+  ng-href="<%-item.href%>">
+  <%-lng(item.title)%>
+</md-sidemenu-button>
 
-  <%}%>
+<%}%>

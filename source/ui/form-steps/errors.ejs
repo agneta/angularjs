@@ -7,10 +7,10 @@
   <div class="error type-<%-error.type%>" ng-class="{active:hasError('<%-step.name%>','<%-name%>')}">
     <%if(error.type=='balloon'){
       error.class='red'%>
-    <%-template('ui/form-steps/balloon',{balloon:error,error:true})%>
+    <%-await template('ui/form-steps/balloon',{balloon:error,error:true})%>
     <%}%>
   <%if(error.type=='view'){%>
-  <%-template(error.template,{error:error})%>
+  <%-await template(error.template,{error:error})%>
   <%}%>
   </div>
 <%}%>

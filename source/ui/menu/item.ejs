@@ -3,7 +3,7 @@
   class="ag-list-item item"
   layout="row"
   layout-align="start center">
-  <%-template('ui/has-role',{authorization:item.authorization})%>
+  <%-await template('ui/has-role',{authorization:item.authorization})%>
   <span>
     <%-lng(item.title)%></span>
   <span flex="auto"></span>
