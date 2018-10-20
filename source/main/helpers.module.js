@@ -18,10 +18,20 @@
 var agneta = window.agneta;
 
 agneta.dialog = function(name) {
-  return agneta.urljoin(agneta.services.view, agneta.lang, 'dialog', name, 'view');
+  return agneta.urljoin({
+    path: [agneta.services.view, agneta.lang, 'dialog', name],
+    query: {
+      type: 'view'
+    }
+  });
 };
 agneta.partial = function(name) {
-  return agneta.urljoin(agneta.services.view, agneta.lang, 'partial', name, 'view');
+  return agneta.urljoin({
+    path: [agneta.services.view, agneta.lang, 'partial', name],
+    query: {
+      type: 'view'
+    }
+  });
 };
 
 agneta.get_icon = function(name) {
@@ -67,18 +77,18 @@ agneta.url = function() {
 };
 
 agneta.url_api = function(path) {
-
   return agneta.urljoin(agneta.services.url, 'api', path);
-
 };
 
 agneta.langPath = function(data) {
   var args;
-  if(angular.isObject(data)){
-    args = [angular.extend(data,{
-      path: [data.lang || agneta.lang].concat(data.path)
-    })];
-  }else{
+  if (angular.isObject(data)) {
+    args = [
+      angular.extend(data, {
+        path: [data.lang || agneta.lang].concat(data.path)
+      })
+    ];
+  } else {
     args = Array.prototype.slice.call(arguments);
     args.unshift(agneta.lang);
   }
@@ -111,10 +121,8 @@ agneta.urljoin = function() {
 //--------------------------------------------------------------------
 
 agneta.colorLuminance = function(hex, lum) {
-
   // validate hex string
-  hex = String(hex)
-    .replace(/[^0-9a-f]/gi, '');
+  hex = String(hex).replace(/[^0-9a-f]/gi, '');
   if (hex.length < 6) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
   }
@@ -122,13 +130,12 @@ agneta.colorLuminance = function(hex, lum) {
 
   // convert to decimal and change luminosity
   var rgb = '#',
-    c, i;
+    c,
+    i;
   for (i = 0; i < 3; i++) {
     c = parseInt(hex.substr(i * 2, 2), 16);
-    c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255))
-      .toString(16);
-    rgb += ('00' + c)
-      .substr(c.length);
+    c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
+    rgb += ('00' + c).substr(c.length);
   }
 
   return rgb;
@@ -147,7 +154,6 @@ function url_for(path) {
 }
 
 function urljoin(args) {
-
   var params = [];
 
   if (angular.isObject(args[0])) {
@@ -195,5 +201,4 @@ function urljoin(args) {
   }
 
   return result;
-
 }

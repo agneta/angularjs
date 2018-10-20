@@ -15,7 +15,7 @@
  *   limitations under the License.
  */
 
-var app = angular.module("MainApp");
+var app = angular.module('MainApp');
 
 app.run(function($rootScope, $mdDialog) {
   ////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ app.run(function($rootScope, $mdDialog) {
     }
 
     var locals = {};
-    var path = agneta.urljoin(agneta.lang, "dialog", options.partial);
+    var path = agneta.urljoin(agneta.lang, 'dialog', options.partial);
 
     locals.data = options.data || {};
 
@@ -75,7 +75,7 @@ app.run(function($rootScope, $mdDialog) {
   $rootScope.dialog = $mdDialog.open;
 });
 
-agneta.directive("AgDialogCtrl", function($rootScope, $mdDialog, data) {
+agneta.directive('AgDialogCtrl', function($rootScope, $mdDialog, data) {
   var vm = this;
 
   vm.data = data;
@@ -92,7 +92,7 @@ agneta.directive("AgDialogCtrl", function($rootScope, $mdDialog, data) {
     $mdDialog.hide(data);
   };
 
-  $rootScope.$on("error", function() {
+  $rootScope.$on('error', function() {
     vm.loading = false;
   });
 });
