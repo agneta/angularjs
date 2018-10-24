@@ -76,8 +76,8 @@ scripts:
       path: "lib/angular-sanitize.min"
     - dep: "ngStorage"
       path: "lib/ngStorage.min"
-    - name: "socketCluster"
-      path: "lib/socketcluster.min"
+    - name: io
+      path: "lib/socket.io"
   app:
     - dep: lbServices
       path: generated/services.min
@@ -111,13 +111,9 @@ libraries:
     include:
       - "fonts/**"
       - "*.min.css"
-  ? string
   fuse.js:
     ignoreDefaults: true
     include: "*.min.js"
-  ? angular
-  ? angular-animate
-  ? angular-aria
   angular-i18n:
     dir: "angular-i18n"
     include:
@@ -129,20 +125,13 @@ libraries:
     ignore:
       - "modules/**"
       - "layouts/**"
-  ? angular-messages
-  ? angular-resource
-  ? angular-cookies
-  ? angular-route
-  ? angular-moment
-  ? angular-material-data-table
-  ? angular-sanitize
-  ? cookieconsent
-  ? oclazyload
-  ? ngstorage
-  ? Chart.js
-  zxcvbn:
+  socket.io-client:
     include:
       - dist/**
+  zxcvbn:
+    include:
+      - dist/socket.io.js
+      - dist/socket.io.js.map
   moment:
     dir: "moment"
     include: "*.js"

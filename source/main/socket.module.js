@@ -15,18 +15,16 @@
  *   limitations under the License.
  */
 
-/*global socketCluster*/
+/*global io*/
 
 var app = angular.module('MainApp');
 
 app.factory('SocketIO', function($rootScope) {
-
   $rootScope.system = {};
 
-  var socket = socketCluster.connect({
-    host: agneta.services.host,
+  var socket = io(agneta.services.host, {
     path: '/socket',
-    autoReconnect: true
+    autoConnect: true
   });
 
   socket.on('disconnect', function() {
@@ -36,54 +34,36 @@ app.factory('SocketIO', function($rootScope) {
     };
   });
 
-  socket.on('connect', function() {
+  socket.on('connection', function() {
+    console.log('connected!');
     $rootScope.system.notification = null;
   });
 
-  socket.on('unauthorized', function() {
-    console.error({
-      title: 'Unauthorized',
-      content: 'You are not able to connect with the socket server because you have unauthorized access privileges.'
-    });
-  });
-
-  socket.on('error', function(err) {
+  socket.on('connect_error', function(err) {
     console.error(err);
   });
 
-  function connect(namespace) {
-
+  function connect(room) {
+    socket.emit('join', room);
     return {
       on: function(name, cb) {
-        var channel = socket.subscribe(getName(name));
-        channel.watch(cb);
-        return channel;
+        return socket.on(getPath(name), cb);
       },
       once: function(name, cb) {
-        name = getName(name);
-        var channel = socket.subscribe(name);
-        channel.watch(function() {
-          socket.unsubscribe(name);
-          cb();
-        });
+        return socket.once(getPath(name), cb);
       },
       emit: function(name, data) {
-        socket.publish(getName(name), data);
-      },
-      removeAllListeners: function(name) {
-        socket.unsubscribe(getName(name));
+        return socket.emit(getPath(name), data);
       }
     };
 
-    function getName(name) {
-      return namespace + '.' + name;
+    function getPath(name) {
+      return `${room}.${name}`;
     }
-
   }
 
   return {
     connect: connect,
     socket: socket
   };
-
 });
